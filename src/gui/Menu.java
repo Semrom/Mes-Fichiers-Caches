@@ -41,20 +41,20 @@ public class Menu extends JFrame implements ActionListener {
 		
 		super(titre);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setResizable(false);
-        this.setContentPane(Contenu());
-        this.setJMenuBar(BarreMenu());
-        this.setIconImage(icone);
-       
-        this.addWindowListener(new WindowAdapter(){   //Quand on clique sur la croix rouge
-    	    public void windowClosing(WindowEvent evt)
-    	   {
-    	      Quitter();
-    	   }
-    	});
-        
-        
-        pack();
+		this.setResizable(false);
+		this.setContentPane(Contenu());
+		this.setJMenuBar(BarreMenu());
+		this.setIconImage(icone);
+	
+	        this.addWindowListener(new WindowAdapter(){   //Quand on clique sur la croix rouge
+	    	    public void windowClosing(WindowEvent evt)
+	    	   {
+	    	      Quitter();
+	    	   }
+	    	});
+	
+	
+		pack();
 	}
 	
 	private JMenuBar BarreMenu() {
@@ -83,100 +83,100 @@ public class Menu extends JFrame implements ActionListener {
 		        }
 		    });
 		
-		 	return BarreMenu;
+		 return BarreMenu;
 	}
 	
 	JPanel Contenu() {
-    	
-    	JPanel Content = new JPanel();		
-    	JLabel Titre = new JLabel("Attention : le Finder redémarrera au cours de l'opération.");
-    	
-    	Font police = new Font("Trebuchet MS", Font.BOLD, 17);
-    	Font policebut = new Font("Trebuchet MS", Font.BOLD, 15);
-    	
-        Content.setLayout(new GridLayout(0,1));
-        Content.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-        Content.setBackground(Color.ORANGE);
-        
-        Titre.setFont(police);
-        Titre.setForeground(Color.BLACK);
-        Titre.setHorizontalAlignment(JLabel.CENTER);
-        Titre.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        afficher = new JButton("Afficher les fichiers");
-        afficher.setFont(policebut);
-        afficher.addActionListener(this);
-    
-        Content.add(Titre);
-        Content.add(afficher);
-        
-        return Content;
-    }
-    
-    private void APropos() {
-    	apropos = new APropos(this, "A propos", true);
-    	apropos.setLocationRelativeTo(null);
-    	apropos.setVisible(true);	
-    }
-    
-    private void Quitter() {
-    	if (JOptionPane.showConfirmDialog(this, "Voulez-vous vraiment quitter ?",
-                "Quitter", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
-            System.exit(0);
-    }
+	    
+	    JPanel Content = new JPanel();		
+	    JLabel Titre = new JLabel("Attention : le Finder redémarrera au cours de l'opération.");
+	    	
+	    Font police = new Font("Trebuchet MS", Font.BOLD, 17);
+	    Font policebut = new Font("Trebuchet MS", Font.BOLD, 15);
+	    	
+	    Content.setLayout(new GridLayout(0,1));
+	    Content.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+	    Content.setBackground(Color.ORANGE);
+	        
+	    Titre.setFont(police);
+	    Titre.setForeground(Color.BLACK);
+	    Titre.setHorizontalAlignment(JLabel.CENTER);
+	    Titre.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+	        
+	    afficher = new JButton("Afficher les fichiers");
+	    afficher.setFont(policebut);
+	    afficher.addActionListener(this);
+	    
+	    Content.add(Titre);
+	    Content.add(afficher);
+	        
+	    return Content;
+	}
+	
+	private void APropos() {
+	    apropos = new APropos(this, "A propos", true);
+	    apropos.setLocationRelativeTo(null);
+	    apropos.setVisible(true);	
+	}
+	
+	private void Quitter() {
+	    if (JOptionPane.showConfirmDialog(this, "Voulez-vous vraiment quitter ?",
+	        "Quitter", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
+	    System.exit(0);
+	}
     
 	public void actionPerformed(ActionEvent e) {
 		
-		if(e.getSource() == afficher) {
+	    if(e.getSource() == afficher) {
 			
-			afficher.setEnabled(false);
+		afficher.setEnabled(false);
 			
-			if (sontAffiches) {
-				cacherFichiers();
-			} else {
-				afficherFichiers();
-			}
+		if (sontAffiches) {
+			cacherFichiers();
+		} else {
+			afficherFichiers();
 		}
+	    }
 	}
     
-    public void afficherFichiers() {
-		new Thread(new Runnable(){
-			public void run() {
-				try {
-					rt.exec("defaults write com.apple.finder AppleShowAllFiles TRUE").waitFor();
-					rt.exec("killall Finder").waitFor();
+	public void afficherFichiers() {
+	    new Thread(new Runnable(){
+		public void run() {
+			try {
+				rt.exec("defaults write com.apple.finder AppleShowAllFiles TRUE").waitFor();
+				rt.exec("killall Finder").waitFor();
 		    	} catch (IOException e) {
 		    		e.printStackTrace();
 		    	} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				e.printStackTrace();
 			}
-		}).start();
+		}
+            }).start();
 		
 		afficher.setEnabled(true);
 		afficher.setText("Cacher les fichiers");
 		this.sontAffiches = true;
-    }
+	}
     
-    public void cacherFichiers() {
-
-    	new Thread(new Runnable(){
-			public void run() {
-				try {
-					rt.exec("defaults write com.apple.finder AppleShowAllFiles FALSE").waitFor();
-					rt.exec("killall Finder").waitFor();
+	public void cacherFichiers() {
+	
+	    new Thread(new Runnable(){
+		public void run() {
+			try {
+				rt.exec("defaults write com.apple.finder AppleShowAllFiles FALSE").waitFor();
+				rt.exec("killall Finder").waitFor();
 		    	} catch (IOException e) {
 		    		e.printStackTrace();
 		    	} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				e.printStackTrace();
 			}
-		}).start();
-    	
-    	afficher.setEnabled(true);
-    	afficher.setText("Afficher les fichiers");
-		this.sontAffiches = false;
-    }
+		}
+	    }).start();
+	    
+	    afficher.setEnabled(true);
+	    afficher.setText("Afficher les fichiers");
+	    this.sontAffiches = false;
+	}
 	
 	public static void main(String[] args) {
 		Menu menu = new Menu("Mes Fichiers Cachés");
