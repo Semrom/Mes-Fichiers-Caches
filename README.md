@@ -1,4 +1,4 @@
-#M es Fichiers Cachés
+# Mes Fichiers Cachés
 Ceci est un programme personnel, réalisé en 2016, permattant d'afficher/cacher les fichiers cachés sous Mac OS, en appuyant sur un simple bouton.
 
 Plus d'informations : http://semrom.fr/projets/mes-fichiers-caches.php
